@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asyl Онлайн Дүкені</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #ffcccc;
+            padding: 15px;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+        }
+
+        .auth-buttons a {
+            text-decoration: none;
+            margin-left: 10px;
+            padding: 10px 15px;
+            background-color: #ff6666;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .auth-buttons a:hover {
+            background-color: #ff4d4d;
+        }
+
+        .cart-icon {
+            font-size: 24px;
+            color: #333;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .products {
+            padding: 40px 20px;
+            background-color: white;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+
+        .product-grid {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .product-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            width: 220px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .price {
+            color: #ff6666;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .quantity-input {
+            width: 40px;
+            margin: 0 10px;
+            text-align: center;
+        }
+
+        .add-to-cart-btn {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #ff6666;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #ff4d4d;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 30%;
+            width: 40%;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+
+        .modal-content {
+            text-align: center;
+        }
+
+        .modal-content input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #ff6666;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #ff4d4d;
+        }
+
+        .cart-total {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .checkout-btn {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .checkout-btn:hover {
+            background-color: #218838;
+        }
+
+        .payment-modal {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 30%;
+            width: 40%;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+
+        .remove-item {
+            color: red;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .payment-message {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        /* Төлем формасы */
+        .payment-form input {
+            width: 90%;
+            margin: 5px 0;
+            padding: 10px;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 50px;
+            background-color: #ffcccc;
+            padding: 20px;
+            text-align: center;
+        }
+
+        footer .social-links a {
+            color: #333;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+
+        footer .social-links a:hover {
+            color: #ff6666;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="navbar">
+        <div class="logo">Asyl</div>
+        <div class="auth-buttons">
+            <a href="#" id="login-btn">Войти</a>
+            <a href="#" id="register-btn">Регистрация</a>
+            <span class="cart-icon" id="cart-btn"><i class="fas fa-shopping-cart"></i></span>
+        </div>
+    </div>
+</header>
+
+<div class="products">
+    <h2 class="section-title">Новинки</h2>
+    <div class="product-grid">
+        <!-- Тауар 1 -->
+        <div class="product-card">
+            <img src="диадема.jpeg" alt="диадема">
+            <h3 class="product-name">Диадема</h3>
+            <p class="price">6990₸</p>
+            <input type="number" class="quantity-input" value="1" min="1">
+            <button class="add-to-cart-btn">В корзину</button>
+        </div>
+        <!-- Тауар 2 -->
+        <div class="product-card">
+            <img src="гг.jpeg" alt="Шекелик 2">
+            <h3 class="product-name">Шекелик</h3>
+            <p class="price">4990₸</p>
+            <input type="number" class="quantity-input" value="1" min="1">
+            <button class="add-to-cart-btn">В корзину</button>
+        </div>
+        <!-- Тауар 3 -->
+        <div class="product-card">
+            <img src="бб.jpeg" alt="Цепочка">
+            <h3 class="product-name">Цепочка</h3>
+            <p class="price">4490₸</p>
+            <input type="number" class="quantity-input" value="1" min="1">
+            <button class="add-to-cart-btn">В корзину</button>
+        </div>
+        <!-- Тауар 4 -->
+        <div class="product-card">
+            <img src="вв.jpeg" alt="Диадема2">
+            <h3 class="product-name">Диадема2</h3>
+            <p class="price">5990₸</p>
+            <input type="number" class="quantity-input" value="1" min="1">
+            <button class="add-to-cart-btn">В корзину</button>
+        </div>
+        <!-- Тауар 5 -->
+        <div class="product-card">
+            <img src="сотуар.jpeg" alt="Сотуар">
+            <h3 class="product-name">Сотуар</h3>
+            <p class="price">4990₸</p>
+            <input type="number" class="quantity-input" value="1" min="1">
+            <button class="add-to-cart-btn">В корзину</button>
+        </div>
+        <!-- Тауар 6 -->
+        <div class="product-card">
+            <img src="дд.jpeg" alt="Кольцо">
+            <h3 class="product-name">Кольцо</h3>
+            <p class="price">1990₸</p>
+            <input type="number" class="quantity-input" value="1" min="1">
+            <button class="add-to-cart-btn">В корзину</button>
+        </div>
+    </div>
+</div>
+
+<!-- Кіру модалы -->
+<div class="modal" id="login-modal">
+    <div class="modal-content">
+        <h2>Войти</h2>
+        <input type="email" id="login-email" placeholder="Электронная почта" required>
+        <input type="password" id="login-password" placeholder="Пароль" required>
+        <button id="login-submit">Войти</button>
+        <button id="close-login-modal">закрыть</button>
+    </div>
+</div>
+
+<!-- Тіркелу модалы -->
+<div class="modal" id="register-modal">
+    <div class="modal-content">
+        <h2>Регистрация</h2>
+        <input type="text" id="register-name" placeholder="Имя" required>
+        <input type="email" id="register-email" placeholder="Электронная почта" required>
+        <input type="password" id="register-password" placeholder="Пароль" required>
+        <button id="register-submit">Регистрация</button>
+        <button id="close-register-modal">закрыть</button>
+    </div>
+</div>
+
+<!-- Корзина модалы -->
+<div class="modal" id="cart-modal">
+    <div class="modal-content">
+        <h2>Корзина</h2>
+        <div id="cart-items"></div>
+        <div class="cart-total">Общие: <span id="cart-total">0₸</span></div>
+        <button id="checkout-btn" class="checkout-btn">Оплата заказа</button>
+        <button id="close-cart-modal">закрыть</button>
+    </div>
+</div>
+
+<!-- Төлем модалы -->
+<div class="payment-modal" id="payment-modal">
+    <div class="modal-content">
+        <h2>Оплата заказа</h2>
+        <div class="payment-form">
+            <p>общая сумма: <span id="total-amount">0₸</span></p>
+            <input type="text" id="card-number" placeholder="номер карты" required>
+            <input type="text" id="card-expiry" placeholder="срок (ММ/ЖЖ)" required>
+            <input type="text" id="card-cvv" placeholder="CVV" required>
+            <button id="pay-btn">Оплатить</button>
+        </div>
+        <div class="payment-message" style="display:none;">Оплата прошла успешно!</div>
+        <button id="close-payment-modal">закрыть</button>
+    </div>
+</div>
+
+<footer>
+    <p>© 2024 MONÉ. Барлық құқықтар қорғалған.</p>
+    <div class="social-links">
+        <a href="#"><i class="fab fa-facebook-f"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+    </div>
+</footer>
+
+<script>
+    const loginBtn = document.getElementById('login-btn');
+    const registerBtn = document.getElementById('register-btn');
+    const closeLoginModal = document.getElementById('close-login-modal');
+    const closeRegisterModal = document.getElementById('close-register-modal');
+    const loginModal = document.getElementById('login-modal');
+    const registerModal = document.getElementById('register-modal');
+
+    const cartBtn = document.getElementById('cart-btn');
+    const cartModal = document.getElementById('cart-modal');
+    const closeCartModal = document.getElementById('close-cart-modal');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const paymentModal = document.getElementById('payment-modal');
+    const closePaymentModal = document.getElementById('close-payment-modal');
+    const payBtn = document.getElementById('pay-btn');
+    const paymentMessage = document.querySelector('.payment-message');
+    const totalAmount = document.getElementById('total-amount');
+
+    let cart = [];
+    let total = 0;
+
+    // Кіру модалы ашу
+    loginBtn.onclick = function() {
+        loginModal.style.display = 'block';
+    }
+
+    // Тіркелу модалы ашу
+    registerBtn.onclick = function() {
+        registerModal.style.display = 'block';
+    }
+
+    // Кіру модалын жабу
+    closeLoginModal.onclick = function() {
+        loginModal.style.display = 'none';
+    }
+
+    // Тіркелу модалын жабу
+    closeRegisterModal.onclick = function() {
+        registerModal.style.display = 'none';
+    }
+
+    // Корзина модалы ашу
+    cartBtn.onclick = function() {
+        cartModal.style.display = 'block';
+        updateCart();
+    }
+
+    // Корзина модалын жабу
+    closeCartModal.onclick = function() {
+        cartModal.style.display = 'none';
+    }
+
+    // Тапсырыс беруді аяқтау
+    checkoutBtn.onclick = function() {
+        // Төлем жасау логикасын осында қосу керек
+        totalAmount.innerText = total + '₸'; // Жалпы соманы көрсету
+        paymentModal.style.display = 'block';
+    }
+
+    // Төлем модалын жабу
+    closePaymentModal.onclick = function() {
+        paymentModal.style.display = 'none';
+        paymentMessage.style.display = 'none'; // Жасыру хабарламасы
+    }
+
+    // Тауарды корзинаға қосу
+    document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+        button.onclick = function() {
+            const productCard = this.parentElement;
+            const productName = productCard.querySelector('.product-name').innerText;
+            const productPrice = parseInt(productCard.querySelector('.price').innerText);
+            const quantity = parseInt(productCard.querySelector('.quantity-input').value);
+
+            cart.push({ name: productName, price: productPrice, quantity: quantity });
+            total += productPrice * quantity;
+
+            updateCart();
+        }
+    });
+
+    function updateCart() {
+        const cartItemsDiv = document.getElementById('cart-items');
+        cartItemsDiv.innerHTML = '';
+
+        cart.forEach((item, index) => {
+            cartItemsDiv.innerHTML += `<div>${item.name} - ${item.price}₸ x ${item.quantity} <span class="remove-item" onclick="removeItem(${index})">[Жою]</span></div>`;
+        });
+
+        document.getElementById('cart-total').innerText = total + '₸';
+    }
+
+    function removeItem(index) {
+        total -= cart[index].price * cart[index].quantity;
+        cart.splice(index, 1);
+        updateCart();
+    }
+
+    // Төлемді аяқтау
+    payBtn.onclick = function() {
+        // Төлем жасау логикасы
+        const cardNumber = document.getElementById('card-number').value;
+        const cardExpiry = document.getElementById('card-expiry').value;
+        const cardCVV = document.getElementById('card-cvv').value;
+
+        // Төлемді сәтті жүзеге асырылғаны туралы хабарлау
+        if (cardNumber && cardExpiry && cardCVV) {
+            paymentMessage.style.display = 'block';
+            setTimeout(() => {
+                paymentModal.style.display = 'none';
+                cart = [];
+                total = 0;
+                updateCart();
+                paymentMessage.style.display = 'none';
+            }, 2000); // 2 секундтан кейін модал жабылады
+        } else {
+            alert('Барлық өрістерді толтырыңыз.');
+        }
+    }
+
+    // Кіру және тіркелу сәтті болғанда негізгі бетке ауысу
+    document.getElementById('login-submit').onclick = function() {
+        // Мұнда аутентификация логикасын қосу керек
+        window.location.href = "index.html"; // Негізгі бет
+    }
+
+    document.getElementById('register-submit').onclick = function() {
+        // Мұнда тіркелу логикасын қосу керек
+        window.location.href = "index.html"; // Негізгі бет
+    }
+</script>
+</body>
+</html>
